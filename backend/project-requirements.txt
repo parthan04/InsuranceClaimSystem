@@ -1,0 +1,570 @@
+# REQUIREMENTS
+
+django-cors-headers==4.6.0
+django-filter==24.2
+django-storages==1.14.2
+djangorestframework==3.15.1
+djangorestframework-simplejwt==5.5.1
+python-dotenv==1.1.1
+
+
+# PROJECT STRUCTURE
+
+backend/
+├── manage.py
+├── core/                    # Django project (settings)
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+│
+├── api/                     # API LAYER
+│   ├── __init__.py
+│   │
+│   ├── auth/                # Custom auth APIs
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── views.py
+│   │   └── urls.py
+│   │
+│   ├── claims/
+│   │   ├── ai_engine/       # AI logic (NOT a Django app)
+│   │   │   ├── __init__.py
+│   │   │   ├── fraud_model.py
+│   │   │   └── predictor.py
+│   │   │
+│   │   ├── notification/    # helper module
+│   │   │   ├── email.py
+│   │   │   └── sms.py
+│   │   │
+│   │   ├── admin_panel/     # admin-only APIs
+│   │   │   ├── views.py
+│   │   │   └── permissions.py
+│   │   │
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── views.py
+│   │   └── urls.py
+│   │
+│   ├── policies/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── views.py
+│   │   └── urls.py
+│
+└── requirements.txt
+
+
+# User Roles
+- user
+- agent
+- admin
+
+# Admin jobs
+✅ Agent Workflow
+✅ Claim Verification System and Approval
+✅ Policy Approval System 
+        - Policy creation -  http://127.0.0.1:8000/api/admin/policy/create/
+        - Policy list     -  http://127.0.0.1:8000/api/policies/policy_lists/
+✅ Agent Assignment System
+✅ Payment Verification System
+✅ Notification Management System
+✅ Agent ↔ Customer Messaging
+✅ Policy Management
+
+
+# Agent jobs
+✅ Claim Investigation
+✅ Policy Review
+✅ Fraud Analysis
+✅ Damage Assessment
+✅ Communication with Users
+✅ Payment Verification
+✅ Status Updates
+✅ Notification Sending
+
+# User jobs
+1️⃣ Claim Application
+2️⃣ Policy Application
+        - car    -   http://127.0.0.1:8000/api/policies/policy_applications/applications/car/
+        - Health -   http://127.0.0.1:8000/api/policies/policy_applications/applications/health/
+        - Home   -   http://127.0.0.1:8000/api/policies/policy_applications/applications/home/
+        - Life   -   http://127.0.0.1:8000/api/policies/policy_applications/applications/life/
+3️⃣ Policy Payment
+4️⃣ Status Tracking
+5️⃣ Claim Amount Receival
+6️⃣ Notifications
+7️⃣ Damage Predictor
+
+
+# API
+FOR REGISTRATION   -  http://127.0.0.1:8000/api/accounts/register/
+FOR LOGIN          -  http://127.0.0.1:8000/api/accounts/login/
+FOR REFRESH TOKEN  -  http://127.0.0.1:8000/api/accounts/token/refresh/
+
+
+#  Work Flow 
+
+🧑‍💼 ADMIN SIDE – Responsibilities & Systems
+
+Admins control the platform.
+
+They don’t manually do everything — they manage & decide.
+
+✅ 1️⃣ Agent Workflow Management
+
+Admin Can:
+
+✔ Create agents
+✔ Activate / deactivate agents
+✔ Assign workload
+✔ Monitor performance
+
+System Needs:
+
+✔ Agent table
+✔ Agent status
+✔ Agent workload tracking
+
+✅ 2️⃣ Claim Verification & Approval System
+
+Admin Role:
+
+✔ Final decision maker
+
+Workflow:
+
+User → Claim Apply
+↓
+Agent → Investigate
+↓
+Admin → Approve / Reject
+
+Admin Actions:
+
+✔ View claim
+✔ View agent remarks
+✔ View fraud score
+✔ Approve / Reject
+
+✅ 3️⃣ Policy Approval System
+
+Workflow:
+
+User → Policy Apply
+↓
+Risk Checks / Agent Review
+↓
+Admin → Approve Policy
+
+Admin Can:
+
+✔ Accept / Reject
+✔ Modify coverage
+✔ Set premium adjustments
+
+✅ 4️⃣ Fraud Detection System 🚨
+
+Automated + Manual
+
+System Detects:
+
+✔ Suspicious documents
+✔ Duplicate claims
+✔ Forged images
+✔ Abnormal claim amount
+
+Admin Can:
+
+✔ View fraud alerts
+✔ Freeze claim
+✔ Request deeper investigation
+
+✅ 5️⃣ Image Forgery / Damage Detection
+
+AI/ML Module
+
+Detect:
+
+✔ Edited images
+✔ Fake damage
+✔ Damage severity
+
+Admin Uses:
+
+✔ Confidence score
+✔ Fraud probability
+
+✅ 6️⃣ Agent Assignment System
+
+VERY important.
+
+Admin / System Assigns:
+
+✔ Claims → Agents
+✔ Policies → Agents
+
+Logic Example:
+
+✔ Region based
+✔ Workload based
+✔ Specialization based
+
+✅ 7️⃣ Payment Verification System 💳
+
+Workflow:
+
+User → Payment Done
+↓
+Verification → Admin/System
+
+Verify:
+
+✔ Payment success
+✔ Amount match
+✔ Fraud payment attempts
+
+✅ 8️⃣ Notification Management System 🔔
+
+Admin Controls:
+
+✔ System alerts
+✔ Broadcast messages
+✔ Claim updates
+✔ Policy updates
+
+Example:
+
+✔ “Policy Approved”
+✔ “Upload Missing Document”
+
+✅ 9️⃣ Agent ↔ Customer Messaging 💬
+
+Admin Can:
+
+✔ Monitor chats
+✔ Intervene if needed
+✔ View dispute cases
+
+👤 USER SIDE – Responsibilities & Systems
+
+User interacts with business features.
+
+✅ 1️⃣ Claim Application 🚗
+
+User Can:
+
+✔ Submit claim
+✔ Upload images
+✔ Upload documents
+
+System Needs:
+
+✔ Claim form
+✔ Document storage
+✔ Image storage
+✔ Status tracking
+
+✅ 2️⃣ Policy Application 🛡
+
+User Can:
+
+✔ Select policy type
+✔ Submit details
+✔ Upload supporting data
+
+System Needs:
+
+✔ Policy form
+✔ Risk evaluation
+
+✅ 3️⃣ Policy Payment 💳
+
+User Can:
+
+✔ Pay premium
+
+System Needs:
+
+✔ Payment gateway
+✔ Payment record
+✔ Payment verification
+
+✅ 4️⃣ Status Tracking 📊
+
+User Can Track:
+
+✔ Claim Status
+✔ Policy Status
+✔ Payment Status
+
+Example:
+
+✔ Pending
+✔ Under Review
+✔ Approved
+✔ Rejected
+
+✅ 5️⃣ Claim Amount Receival 💰
+
+After approval:
+
+✔ Show payout details
+✔ Payment status
+✔ Transaction history
+
+✅ 6️⃣ Notifications 🔔
+
+User Receives:
+
+✔ Claim updates
+✔ Policy updates
+✔ Messages
+✔ Payment alerts
+
+✅ 7️⃣ Damage Predictor 🚗🤖
+
+AI Feature:
+
+User uploads image
+↓
+System predicts damage
+
+✔ Severity
+✔ Estimated repair cost
+✔ Fraud signals
+
+🔥 VERY strong feature for portfolio.
+
+🌐 FULL SYSTEM WORKFLOW (Realistic)
+🛡 POLICY FLOW
+
+User → Apply Policy
+↓
+System / Agent Review
+↓
+Admin Approval
+↓
+User Payment
+↓
+Payment Verification
+↓
+Policy Active
+
+🚗 CLAIM FLOW
+
+User → Submit Claim
+↓
+AI Damage Detection
+↓
+Fraud Detection
+↓
+Agent Assignment
+↓
+Agent Review
+↓
+Admin Decision
+↓
+Payout Processing
+↓
+User Receives Amount
+
+💬 COMMUNICATION FLOW
+
+User ↔ Agent Messaging
+↓
+Admin Monitoring
+
+
+# SECURITY SIDE 
+
+✅ 🔐 BACKEND SECURITY CHECKLIST (CRITICAL LAYER)
+
+Backend = Trust Boundary / Security Enforcement
+
+✅ 1️⃣ Authentication & Authorization
+
+✔ Strong password policy
+✔ Password hashing (bcrypt / argon2 / PBKDF2)
+✔ No plain text passwords EVER
+✔ Role-based access control (RBAC)
+✔ Verify permissions on EVERY request
+✔ Protect admin routes
+✔ Session expiration / timeout
+✔ Re-authentication for sensitive actions
+
+❌ Never trust frontend roles / flags
+
+✅ 2️⃣ CSRF Protection
+
+✔ CSRF tokens
+✔ SameSite cookies
+✔ Validate Origin / Referer
+✔ Framework protection enabled (Django / Spring / etc.)
+
+✅ 3️⃣ Input Validation (VERY IMPORTANT 🔥)
+
+✔ Validate ALL inputs server-side
+✔ Type checking
+✔ Length limits
+✔ Whitelisting > Blacklisting
+✔ Reject unexpected fields
+✔ Sanitize dangerous characters when needed
+
+Protects against:
+
+✔ SQL Injection
+✔ XSS
+✔ Command Injection
+✔ Path Traversal
+
+✅ 4️⃣ SQL Injection Prevention
+
+✔ Use ORM / Prepared Statements
+✔ Parameterized queries ONLY
+✔ No raw SQL concatenation
+
+✔ Validate numeric inputs strictly
+
+✅ 5️⃣ File Upload Security
+
+✔ Validate file type (MIME + Extension)
+✔ Rename uploaded files
+✔ Store outside web root
+✔ File size limits
+✔ Block executables/scripts
+✔ Scan files if sensitive system
+
+✅ 6️⃣ Path Traversal Protection
+
+✔ Never trust file paths from users
+✔ Normalize paths
+✔ Restrict directories
+✔ Use safe file handlers
+
+✅ 7️⃣ Session & Cookie Security
+
+✔ Secure cookies (Secure flag)
+✔ HttpOnly cookies
+✔ SameSite cookies
+✔ Session rotation after login
+✔ Session expiration
+✔ Logout invalidation
+
+✔ HTTPS ONLY
+
+✅ 8️⃣ Brute Force Protection
+
+✔ Rate limiting
+✔ Login throttling
+✔ Account lockout
+✔ CAPTCHA (optional)
+✔ IP monitoring
+
+✅ 9️⃣ Business Logic Protection
+
+✔ Validate workflow order
+✔ Prevent privilege escalation
+✔ Prevent price / amount tampering
+✔ Prevent duplicate transactions
+✔ Verify ownership of resources
+
+Most dangerous vulnerabilities live here 🔥
+
+✅ 🔟 Error Handling
+
+✔ No stack traces in production
+✔ No DB errors exposed
+✔ Generic error messages
+
+❌ Never leak internal details
+
+✅ 1️⃣1️⃣ Security Headers
+
+✔ CSP
+✔ HSTS
+✔ X-Frame-Options
+✔ X-Content-Type-Options
+✔ Referrer-Policy
+
+Usually via backend / reverse proxy.
+
+✅ 🖥 FRONTEND SECURITY CHECKLIST (SAFETY LAYER)
+
+Frontend = Attack Surface Reduction / Safe Rendering
+
+✅ 1️⃣ XSS Prevention 🔥
+
+✔ Avoid innerHTML
+✔ Use safe DOM APIs
+✔ Escape output
+✔ Sanitize dynamic content
+✔ Use framework auto-escaping (React / Vue / etc.)
+
+✔ Treat ALL API data as untrusted
+
+✅ 2️⃣ Safe Token Handling
+
+✔ Prefer HttpOnly cookies
+✔ Avoid storing tokens in localStorage (if sensitive)
+✔ Never expose secrets
+✔ Protect against token leakage
+
+✅ 3️⃣ Input Handling (UX Layer)
+
+✔ Validate inputs for UX
+✔ Length limits
+✔ Format checks
+✔ But NEVER rely on this alone
+
+✅ 4️⃣ Secure API Usage
+
+✔ Always HTTPS
+✔ No sensitive data in URLs
+✔ Avoid exposing internal IDs unnecessarily
+✔ Proper headers
+
+✅ 5️⃣ Sensitive Data Protection
+
+✔ Never expose:
+
+❌ API keys
+❌ Secrets
+❌ Internal configs
+❌ Debug data
+
+✔ Remove console logs in production
+
+✅ 6️⃣ CSP Compatibility
+
+✔ Avoid inline scripts
+✔ Avoid unsafe eval
+✔ Helps block XSS injection
+
+✅ 7️⃣ Clickjacking Awareness
+
+✔ Respect X-Frame-Options
+✔ Avoid unsafe embedding
+
+✅ 8️⃣ Dependency Security
+
+✔ Audit third-party libraries
+✔ Avoid outdated packages
+✔ Remove unused libraries
+
+Frontend supply-chain attacks are real 🔥
+
+✅ 9️⃣ Proper Error Display
+
+✔ No technical errors shown to users
+✔ No internal API responses leaked

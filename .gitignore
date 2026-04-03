@@ -1,0 +1,73 @@
+# =========================
+# Environment & Secrets
+# =========================
+.env
+.env.*
+.env.production
+backend/.env
+frontend-app/.env
+frontend-app/.env.local
+
+# =========================
+# Python / Django
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.sqlite3
+*.log
+
+# Virtual environment
+env/
+venv/
+.venv/
+
+# Django
+staticfiles/
+media/
+*.mo
+*.pot
+**/migrations/__pycache__/
+
+# =========================
+# Node / Vite
+# =========================
+node_modules/
+dist/
+vite.svg
+
+# =========================
+# Build & Cache
+# =========================
+build/
+.cache/
+coverage/
+
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# PostgreSQL
+# =========================
+*.dump
+*.sql
+
+# =========================
+# Misc
+# =========================
+*.bak
+*.tmp
